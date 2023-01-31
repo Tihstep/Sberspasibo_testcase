@@ -21,3 +21,4 @@ user_item_data = pd.merge(user_item_data, item_id, on=['mid'], how='left')
 user_item_data = user_item_data[['userId', 'itemId', 'rating', 'timestamp']]
 # DataLoader for training
 sample_generator = SampleGenerator(interactions=user_item_data)
+evaluate_data = sample_generator.evaluate_data
