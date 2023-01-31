@@ -37,12 +37,19 @@ class SampleGenerator(object):
         self.user_pool = set(self.interactions['userId'].unique())
         self.item_pool = set(self.interactions['itemId'].unique())
         # create negative item samples for NCF learning
-        #self.negatives = self._sample_negative(interactions)
-        #self.train_interactions, self.test_interactions = self._split_loo(self.interactions)
+        self.negatives = self._sample_negative(interactions)
+        self.train_interactions, self.test_interactions = self._split_loo(self.interactions)
 
     @staticmethod
     def _split_loo(interactions):
-        pass
+        """Split dataset by 0.8/0.2 train/test proportions"""
+        train, test = train_test_split(interactions, test_size=0.2)
+        return train['userId', 'itemId', 'data'], test['userId', 'itemId', 'data']
 
-    def _sample_negative(self, interactions):
-        pass
+    def _sample_negative(self, ratings):
+        """return all negative items & 100 sampled negative items"""
+        interact_status = ratings.groupby('userId')['itemId'].apply(set).reset_index().rename(
+            columns={'itemId': 'interacted_items'})
+        interact_status['negative_items'] = interact_status['interacted_items'].apply(lambda x: self.item_pool - x)
+        interact_status['negative_samples'] = interact_status['negative_items'].apply(lambda x: random.sample(x, 99))
+        return interact_status[['userId', 'negative_items', 'negative_samples']]
