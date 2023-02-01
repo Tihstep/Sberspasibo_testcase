@@ -43,3 +43,13 @@ class NeuMF(torch.nn.Module):
         interaction = self.logistic(logits)
         return interaction
 
+
+class NeuMFEngine(Engine):
+    """Engine for training & evaluating GMF model"""
+    def __init__(self, config):
+        self.model = NeuMF(config)
+        if config['use_cuda'] is True:
+            assert torch.cuda.is_available(), 'CUDA is not available'
+            torch.cuda.set_device(config['device_id'])
+            self.model.cuda()
+        super(NeuMFEngine, self).__init__(config)
