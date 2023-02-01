@@ -42,3 +42,4 @@ class NeuMF(torch.nn.Module):
         logits = self.Linear(vector)
         interaction = self.logistic(logits)
         return interaction
+
