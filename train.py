@@ -40,3 +40,9 @@ evaluate_data = sample_generator.evaluate_data
 GMFengine = GMFEngine(gmf_config)
 MLPengine= MLPEngine(mlp_config)
 NeuMFengine = NeuMFEngine(neumf_config)
+
+for epoch in range(neumf_config['num_epoch']):
+    train_loader = sample_generator.instance_a_train_loader(neumf_config['num_negative'], neumf_config['batch_size'])
+    NeuMFengine.train_an_epoch(train_loader, epoch_id=epoch)
+    hit10 = NeuMFengine.evaluate(evaluate_data, epoch_id=epoch)
+    NeuMFengine.save(neumf_config['alias'], epoch)
