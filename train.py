@@ -36,4 +36,7 @@ user_item_data = user_item_data[['userId', 'itemId', 'rating', 'timestamp']]
 # DataLoader for training
 sample_generator = SampleGenerator(interactions=user_item_data)
 evaluate_data = sample_generator.evaluate_data
-engine = GMFEngine(gmf_config)
+# Definite Engines
+GMFengine = GMFEngine(gmf_config)
+MLPengine= MLPEngine(mlp_config)
+NeuMFengine = NeuMFEngine(neumf_config)
