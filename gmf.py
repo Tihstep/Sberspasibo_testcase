@@ -1,6 +1,7 @@
 import torch
 from engine import Engine
 
+
 class GMF(torch.nn.Module):
     def __init__(self, config):
         super(GMF, self).__init__()
@@ -21,7 +22,6 @@ class GMF(torch.nn.Module):
         logits = self.affine_output(element_product)
         interaction = self.logistic(logits)
         return interaction
-
 
 
 class GMFEngine(Engine):
