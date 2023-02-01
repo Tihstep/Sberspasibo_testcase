@@ -18,7 +18,7 @@ class MLP(torch.nn.Module):
         for idx, (in_size, out_size) in enumerate(zip(config['layers'][:-1], config['layers'][1:])):
             self.fc_layers.append(torch.nn.Linear(in_size, out_size))
 
-        self.affine_output = torch.nn.Linear(in_features=config['layers'][-1], out_features=1)
+        self.Linear = torch.nn.Linear(in_features=config['layers'][-1], out_features=1)
         self.logistic = torch.nn.Sigmoid()
 
     def forward(self, user_indices, item_indices):
@@ -30,7 +30,7 @@ class MLP(torch.nn.Module):
             vector = torch.nn.ReLU()(vector)
             vector = torch.nn.BatchNorm1d()(vector)
             vector = torch.nn.Dropout(p=0.5)(vector)
-        logits = self.affine_output(vector)
+        logits = self.Linear(vector)
         interactions = self.logistic(logits)
         return interactions
 
