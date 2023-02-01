@@ -3,7 +3,7 @@ import numpy as np
 from data import SampleGenerator
 from gmf import GMFEngine
 from mlp import MLPEngine
-from nmf import NMFEngine
+from nmf import NeuMFEngine
 
 gmf_config = {
               'alias': 'gmf_factor',
@@ -69,10 +69,10 @@ evaluate_data = sample_generator.evaluate_data
 # Definite Engines
 GMFengine = GMFEngine(gmf_config)
 MLPengine= MLPEngine(mlp_config)
-NMFengine = NeuMF(neumf_config)
+NMFengine = NeuMFEngine(neumf_config)
 
 for epoch in range(neumf_config['num_epoch']):
     train_loader = sample_generator.instance_a_train_loader(neumf_config['num_negative'], neumf_config['batch_size'])
     NMFengine.train_an_epoch(train_loader, epoch_id=epoch)
-    hit10 = NeuMFengine.evaluate(evaluate_data, epoch_id=epoch)
-    NeuMFengine.save(neumf_config['alias'], epoch)
+    hit10 = NMFengine.evaluate(evaluate_data, epoch_id=epoch)
+    NMFengine.save(neumf_config['alias'], epoch)
