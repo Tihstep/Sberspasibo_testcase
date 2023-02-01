@@ -12,14 +12,14 @@ class GMF(torch.nn.Module):
         self.embedding_user = torch.nn.Embedding(num_embeddings=self.num_users, embedding_dim=self.hidden_dim)
         self.embedding_item = torch.nn.Embedding(num_embeddings=self.num_items, embedding_dim=self.hidden_dim)
 
-        self.affine_output = torch.nn.Linear(in_features=self.hidden_dim, out_features=1)
+        self.Linear = torch.nn.Linear(in_features=self.hidden_dim, out_features=1)
         self.logistic = torch.nn.Sigmoid()
 
     def forward(self, user_indices, item_indices):
         user_embedding = self.embedding_user(user_indices)
         item_embedding = self.embedding_item(item_indices)
         element_product = torch.mul(user_embedding, item_embedding)
-        logits = self.affine_output(element_product)
+        logits = self.Linear(element_product)
         interaction = self.logistic(logits)
         return interaction
 
