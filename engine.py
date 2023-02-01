@@ -18,26 +18,26 @@ class Engine(object):
         self.crit = torch.nn.BCELoss()
 
     def train_single_batch(self, users, items, ratings):
-        assert hasattr(self, 'model'), 'Please specify the exact model !'
+        assert hasattr(self, 'model'), 'Specify the exact model !'
         if self.config['use_cuda'] is True:
             users, items, ratings = users.cuda(), items.cuda(), ratings.cuda()
         self.opt.zero_grad()
-        ratings_pred = self.model(users, items)
-        loss = self.crit(ratings_pred.view(-1), ratings)
+        interaction_pred = self.model(users, items)
+        loss = self.crit(interaction_pred.view(-1), ratings)
         loss.backward()
         self.opt.step()
         loss = loss.item()
         return loss
 
     def train_an_epoch(self, train_loader, epoch_id):
-        assert hasattr(self, 'model'), 'Please specify the exact model !'
+        assert hasattr(self, 'model'), 'Specify the exact model !'
         self.model.train()
         total_loss = 0
         for batch_id, batch in enumerate(train_loader):
             assert isinstance(batch[0], torch.LongTensor)
-            user, item, rating = batch[0], batch[1], batch[2]
-            rating = rating.float()
-            loss = self.train_single_batch(user, item, rating)
+            user, item, interaction = batch[0], batch[1], batch[2]
+            interaction = interaction.float()
+            loss = self.train_single_batch(user, item, interaction)
             print('[Training Epoch {}] Batch {}, Loss {}'.format(epoch_id, batch_id, loss))
             total_loss += loss
         self._writer.add_scalar('model/loss', total_loss, epoch_id)
