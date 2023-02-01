@@ -33,3 +33,14 @@ class MLP(torch.nn.Module):
         logits = self.affine_output(vector)
         interactions = self.logistic(logits)
         return interactions
+
+
+class MLPEngine(Engine):
+    """Engine for training & evaluating MLP model"""
+    def __init__(self, config):
+        self.model = MLP(config)
+        if config['use_cuda'] is True:
+            assert torch.cuda.is_available(), 'CUDA is not available'
+            torch.cuda.set_device(config['device_id'])
+            self.model.cuda()
+        super(MLPEngine, self).__init__(config)
