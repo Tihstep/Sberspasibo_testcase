@@ -30,11 +30,7 @@ class GMFEngine(Engine):
     def __init__(self, config):
         self.model = GMF(config)
         if config['use_cuda'] is True:
-            use_cuda(True, config['device_id'])
-            self.model.cuda()
-        super(GMFEngine, self).__init__(config)
-        self.model = GMF(config)
-        if config['use_cuda'] is True:
-            use_cuda(True, config['device_id'])
+            assert torch.cuda.is_available(), 'CUDA is not available'
+            torch.cuda.set_device(config['device_id'])
             self.model.cuda()
         super(GMFEngine, self).__init__(config)
