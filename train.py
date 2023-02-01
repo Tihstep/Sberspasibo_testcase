@@ -46,3 +46,4 @@ for epoch in range(neumf_config['num_epoch']):
     NeuMFengine.train_an_epoch(train_loader, epoch_id=epoch)
     hit10 = NeuMFengine.evaluate(evaluate_data, epoch_id=epoch)
     NeuMFengine.save(neumf_config['alias'], epoch)
+    
